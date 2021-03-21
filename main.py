@@ -1,4 +1,3 @@
-
 import PySimpleGUI as sg
 
 # Define the window's contents
@@ -7,10 +6,10 @@ sg.theme('GreenTan')
 layout = [[sg.Text('Your Input')],
           [sg.Multiline(size=(40, 2))],
           [sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
-          [sg.Button('SEND'), sg.Button('EXIT')]]
+          [sg.Button('SUBMIT'), sg.Button('EXIT')]]
 
 # Create the window
-window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
+window = sg.Window('Calm Bot', layout, default_element_size=(50, 3))
 
 # Display and interact with the Window using an Event Loop
 
