@@ -2,30 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@0.2.1
-
-jobs:
-  build-and-test:
-    working_directory: ~/Assignment-3
-    executor: docker-executor
-    steps:
-      - checkout
-      - run: sudo chown -R circleci:circleci /usr/local/bin
-      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.9/site-packages
-      - restore_cache:  # ensure this step occurs *before* installing dependencies
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-      - run:
-          command: |
-            sudo pip install pipenv
-            pipenv install
-      - save_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-          paths:
-            - ".venv"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.9/site-packages"
-      - run:
-          command: main.py
-          name: Test
+  
 executors:
   docker-executor:
     docker:
@@ -33,6 +10,20 @@ executors:
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD
+
+jobs:
+  build-and-test:
+    working_directory: ~/Assignment-3
+    executor: docker-executor
+    steps:
+      - checkout
+      - run:
+          command: |
+            sudo pip install pipenv
+            pipenv install
+      - run:
+          command: main.py
+          name: Test
 
 workflows:
   main:
