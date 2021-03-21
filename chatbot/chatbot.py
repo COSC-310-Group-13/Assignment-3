@@ -79,6 +79,10 @@ class ChatBot():
             self.quotes.remove(userInput)                       #otherwise, it outputs that it does not understand users' input
             return response + self.quotes[indexOfQuote[0]]
         else:
-            self.quotes.remove(userInput)   
-            return response + ' ' + "I'm sorry, I didn't quite understand what you just typed."
+            self.quotes.remove(userInput)
+            reasonableResponse = ["I'm sorry, I didn't quite understand what you just typed.","Sorry I'm not capable talking about that right now.",
+                                  "Your choice of discussion is out of my range.", "I didn't get that could you try again?",
+                                  "Unfortunealy I don't recognize what your trying to tell me."]
+            return response + ' ' + random.choice(reasonableResponse)
+            
 
