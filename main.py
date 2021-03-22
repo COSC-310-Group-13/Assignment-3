@@ -1,15 +1,16 @@
+
 import PySimpleGUI as sg
 
 # Define the window's contents
 sg.theme('GreenTan')
 
 layout = [[sg.Text('Your Input')],
-          [sg.Multiline(size=(40, 2))],
+          [sg.InputText(key='i', size=(40, 2))],
           [sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
-          [sg.Button('SUBMIT'), sg.Button('EXIT')]]
+          [sg.Button('SEND'), sg.Button('EXIT')]]
 
 # Create the window
-window = sg.Window('Calm Bot', layout, default_element_size=(50, 3))
+window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
 
 # Display and interact with the Window using an Event Loop
 
@@ -22,15 +23,17 @@ import sys
 def __main__():
     cb = ChatBot()
     cb.extractQuotes('quotes.txt') #we establish the quotes in the object
-
     exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common greetings
 
     while(True):    #run a loop to keep prompting the user for input
         event, values = window.read()
-        print("You: "+ values[0].rstrip())
-        userInput = (values[0].rstrip())
+        print("You: "+ values['i'])
+        userInput = (values['i'])
+        window.FindElement('i').Update('')
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("You: "+userInput, end='')
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
+        if event == sg.WIN_CLOSED or event == 'EXIT':
+            break
         if userInput.lower() in exitWords:
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: It was really nice talking to you!", end='')
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
@@ -51,6 +54,8 @@ def __main__():
                 if event == sg.WINDOW_CLOSED or event == 'Quit':
                     break
                 # Output a message to the window
+
+
 
     window.close()
 
