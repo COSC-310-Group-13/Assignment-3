@@ -39,7 +39,7 @@ def __main__():
     cb.extractQuotes('quotes.txt') #we establish the quotes in the object
     exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common greetings
 
-    exitError = sp.errorHandlingArray(exitWords) # correcting for errors
+    exitError = sc.errorHandlingArray(exitWords) # correcting for errors
 
     while(True):    #run a loop to keep prompting the user for input
         event, values = window.read()
