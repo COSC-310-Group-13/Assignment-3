@@ -1,8 +1,8 @@
 import pytest
 import unittest
-import chatbot.chatbot as cb
-import sys
-import os
+from chatbot.chatbot import ChatBot as cb
+import math
+import random
 
 @pytest.fixture
 def chatbot():
@@ -15,17 +15,33 @@ def userHellos():
     return userHellos
 
 @pytest.fixture
-def boHellos():
+def botHellos():
     botHellos = ['Hello', 'Good day', 'Hey!', 'Hi!', 'Nice to meet you!', 'Hello there!']
     return botHellos
+
+@pytest.fixture
+def rnd_ArrayInt():
+    rndint = {}
+    for i in range(0,1000):
+        rnd = random.randfloat(0,100)
+        math.round(rnd)
+        rndint.append(rnd)
+    
+    return rndint
 
 def test_getQoutes():
 
     assert True
 
-def test_helloMessage():
+def test_helloMessage(chatbot, userHellos, botHellos):
+    p = False  
+    for i in range(0,len(userHellos)-1):
+        if chatbot.helloMessage(userHellos[i]) in botHellos:
+            p = True
+        else:
+            p = False
 
-    assert True
+    assert p
 
 def test_sortIndexList():
 
