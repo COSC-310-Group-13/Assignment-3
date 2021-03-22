@@ -17,15 +17,17 @@ window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
 
 # Finish up by removing from the screen
 from chatbot.chatbot import ChatBot
+from chatbot.spellcheck import SpellCheck
 import sys
 
 
 def __main__():
+    sc = SpellCheck()
     cb = ChatBot()
     cb.extractQuotes('quotes.txt') #we establish the quotes in the object
     exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common greetings
 
-    errorExit = exitError = cb.errorHandlingArray(exitWords) # correcting for errors
+    exitError = sp.errorHandlingArray(exitWords) # correcting for errors
 
     while(True):    #run a loop to keep prompting the user for input
         event, values = window.read()

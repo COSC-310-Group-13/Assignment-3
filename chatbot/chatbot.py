@@ -7,6 +7,7 @@ import sys
 import random
 import string
 import nltk
+from chatbot.spellcheck import SpellCheck
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.stem import PorterStemmer
@@ -23,6 +24,8 @@ nltk.download('punkt', quiet = True)  #this package is required to tokenize sent
 
 class ChatBot():
 
+    sc = SpellCheck()
+
     CV = CountVectorizer()
     quotes = [] #lines taken from file will be placed in quotes and used to talk to user
     ps = PorterStemmer()
@@ -38,25 +41,6 @@ class ChatBot():
         file.close()
         self.quotes = nltk.sent_tokenize(text)
 
-    def errorHandlingArray(self, array):
-
-
-        if " " in array[0]:
-            x = []
-            z=[]
-            for i in range(0,len(array)):
-                x = nltk.word_tokenize(array[i])
-                y=""
-                for w in x:
-                    y = y +(self.ps.stem(w)) + " "
-                z.append(y)
-            return z
-        else:
-            z = []
-            for w in array:
-                z.append(self.ps.stem(w))
-            return z
-
 
     def helloMessage(self, userInput):
         userInput = userInput.lower() #make everything lowercase so bot can doesn't deal with cases
@@ -67,7 +51,7 @@ class ChatBot():
         userHellos = ['hello', "what's up", 'hey', 'hi', 'hello', 'howdy', 'sup', 'hey there']
 
 
-        userError = self.errorHandlingArray(userHellos)
+        userError = self.sc.errorHandlingArray(userHellos)
 
         for word in userInput.split():
             if (word in userHellos) or (word in userError) :
@@ -92,7 +76,7 @@ class ChatBot():
     def botResponse(self, userInput):
         userInput = userInput.lower()   #convert text to lowercase
         self.quotes.append(userInput) #add users' input to end of quotes list
-        errorArray = self.errorHandlingArray(self.quotes) #error array contains the same content as quotes, but corrects for errors
+        errorArray = self.sc.errorHandlingArray(self.quotes) #error array contains the same content as quotes, but corrects for errors
 
         response = ''      #initialize the bots response
         countArray = self.CV.fit_transform(errorArray)             ##these two lines form the similarity scores between
