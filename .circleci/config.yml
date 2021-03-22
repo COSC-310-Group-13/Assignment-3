@@ -1,31 +1,25 @@
 version: 2.1
-
-orbs:
-  python: circleci/python@0.2.1
-  
-executors:
-  docker-executor:
-    docker:
-      - image: circleci/python:[3.9]
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD
-
 jobs:
-  build-and-test:
-    working_directory: ~/Assignment-3
-    executor: docker-executor
+  run-tests:
+    docker:
+      - image: circleci/python:3.9
     steps:
       - checkout
       - run:
-          command: |
-            sudo pip install pipenv
-            pipenv install
-      - run:
-          command: main.py
-          name: Test
+          name: Install Python Dependencies
+          command:
+            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV &&
+            pip install --user -r requirements.txt
+      - run: 
+          name: Pytest Unit Tests
+          command:
+            pytest --junitxml=test-reports/junit.xml tests/
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
 
 workflows:
-  main:
+  build_test:
     jobs:
-      - build-and-test
+      - run-tests
