@@ -1,4 +1,23 @@
+
+import PySimpleGUI as sg
+
+# Define the window's contents
+sg.theme('GreenTan')
+
+layout = [[sg.Text('Your Input')],
+          [sg.InputText(key='i', size=(40, 2))],
+          [sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
+          [sg.Button('SEND'), sg.Button('EXIT')]]
+
+# Create the window
+window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
+
+# Display and interact with the Window using an Event Loop
+
+
+# Finish up by removing from the screen
 from chatbot.chatbot import ChatBot
+from chatbot.spellcheck import SpellCheck
 import sys
 import PySimpleGUI as sg
 import subprocess
@@ -13,13 +32,14 @@ layout = [[sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
 # Create the window
 window = sg.Window('Calm Bot', layout, default_element_size=(50, 3),finalize=True)
 
-
-
 def __main__():
+    sc = SpellCheck()
     cb = ChatBot()
     window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: Hello, my name is Calm Bot and I'm here to help you!")
     cb.extractQuotes('quotes.txt') #we establish the quotes in the object
     exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common greetings
+
+    exitError = sp.errorHandlingArray(exitWords) # correcting for errors
 
     while(True):    #run a loop to keep prompting the user for input
         event, values = window.read()
@@ -49,7 +69,6 @@ def __main__():
                 # See if user wants to quit or window was closed
                 if event == sg.WINDOW_CLOSED or event == 'Quit':
                     sys.exit()
-                # Output a message to the window
 
 __main__()
 
