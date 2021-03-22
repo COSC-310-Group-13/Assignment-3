@@ -3,7 +3,7 @@ import sys
 import PySimpleGUI as sg
 
 # Define the window's contents
-sg.theme('GreenTan')
+sg.theme('Dark2')
 
 layout = [[sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
           [sg.Text('Your Input')],
