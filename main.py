@@ -25,6 +25,8 @@ def __main__():
     cb.extractQuotes('quotes.txt') #we establish the quotes in the object
     exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common greetings
 
+    errorExit = exitError = cb.errorHandlingArray(exitWords) # correcting for errors
+
     while(True):    #run a loop to keep prompting the user for input
         event, values = window.read()
         print("You: "+ values['i'])
@@ -34,7 +36,7 @@ def __main__():
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
         if event == sg.WIN_CLOSED or event == 'EXIT':
             break
-        if userInput.lower() in exitWords:
+        if (userInput.lower() in exitWords) or (userInput.lower() in exitError):
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: It was really nice talking to you!", end='')
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
             print("Calm Bot: It was really nice talking to you!")
@@ -60,5 +62,3 @@ def __main__():
     window.close()
 
 __main__()
-
-
