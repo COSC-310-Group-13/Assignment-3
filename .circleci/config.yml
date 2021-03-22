@@ -9,8 +9,7 @@ jobs:
           name: Install Python Dependencies
           command:
             echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV
-            pip install --user -r requirements.txt
-            pip install pytest
+            pip install pytest 
       - run: 
           name: Pytest Unit Tests
           command:
