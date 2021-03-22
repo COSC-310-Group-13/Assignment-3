@@ -19,11 +19,23 @@ window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
 from chatbot.chatbot import ChatBot
 from chatbot.spellcheck import SpellCheck
 import sys
+import PySimpleGUI as sg
+import subprocess
+# Define the window's contents
+sg.theme('Dark2')
 
+layout = [[sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
+          [sg.Text('Your Input')],
+          [sg.InputText(key='i', size=(40, 2))],
+          [sg.Button('SUBMIT', bind_return_key=True), sg.Button('EXIT')]]
+
+# Create the window
+window = sg.Window('Calm Bot', layout, default_element_size=(50, 3),finalize=True)
 
 def __main__():
     sc = SpellCheck()
     cb = ChatBot()
+    window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: Hello, my name is Calm Bot and I'm here to help you!")
     cb.extractQuotes('quotes.txt') #we establish the quotes in the object
     exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common greetings
 
@@ -37,8 +49,8 @@ def __main__():
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("You: "+userInput, end='')
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
         if event == sg.WIN_CLOSED or event == 'EXIT':
-            break
-        if (userInput.lower() in exitWords) or (userInput.lower() in exitError):
+            sys.exit()
+        if userInput.lower() in exitWords:
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: It was really nice talking to you!", end='')
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
             print("Calm Bot: It was really nice talking to you!")
@@ -56,11 +68,8 @@ def __main__():
                 event, values = window.read()
                 # See if user wants to quit or window was closed
                 if event == sg.WINDOW_CLOSED or event == 'Quit':
-                    break
-                # Output a message to the window
-
-
-
-    window.close()
+                    sys.exit()
 
 __main__()
+
+
