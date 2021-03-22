@@ -1,23 +1,18 @@
-
+from chatbot.chatbot import ChatBot
+import sys
 import PySimpleGUI as sg
 
 # Define the window's contents
 sg.theme('GreenTan')
 
-layout = [[sg.Text('Your Input')],
+layout = [[sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
+          [sg.Text('Your Input')],
           [sg.InputText(key='i', size=(40, 2))],
-          [sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
-          [sg.Button('SEND'), sg.Button('EXIT')]]
+          [sg.Button('SUBMIT', bind_return_key=True), sg.Button('EXIT')]]
 
 # Create the window
-window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
+window = sg.Window('Calm Bot', layout, default_element_size=(50, 3))
 
-# Display and interact with the Window using an Event Loop
-
-
-# Finish up by removing from the screen
-from chatbot.chatbot import ChatBot
-import sys
 
 
 def __main__():
