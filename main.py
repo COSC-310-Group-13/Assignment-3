@@ -21,6 +21,7 @@ def __main__():
                 print("Calm Bot: " + cb.helloMessage(userInput))
             else:
                 print("Calm Bot: " + cb.botResponse(userInput))
+                print(cb.botResponse(userInput))
 
 
 __main__()
