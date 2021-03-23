@@ -11,7 +11,8 @@ from chatbot.spellcheck import SpellCheck
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.stem import PorterStemmer
-nltk.download('punkt', quiet = True)  #this package is required to tokenize sentences
+from nltk.corpus import wordnet
+nltk.download(quiet = True)
 
 
 #This the class of the chatbot which reads quotes from a file and places them into
@@ -75,6 +76,21 @@ class ChatBot():
 
     def botResponse(self, userInput):
         userInput = userInput.lower()   #convert text to lowercase
+
+        # Using synonom recognition
+        potentialAdjectives = ['happy','sad','lazy','tired','angry','lonely','bad','lost']
+
+        for i in range(len(potentialAdjectives)):
+
+            synList = []
+            for syn in wordnet.synsets(potentialAdjectives[i]):
+                for x in syn.lemmas():
+                    synList.append(x.name())
+
+            for k in range(len(synList)):
+                if (synList[k] in userInput):
+                    userInput = userInput +' '+potentialAdjectives[i]
+        
         self.quotes.append(userInput) #add users' input to end of quotes list
         errorArray = self.sc.errorHandlingArray(self.quotes) #error array contains the same content as quotes, but corrects for errors
 
