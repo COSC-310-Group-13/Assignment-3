@@ -50,7 +50,7 @@ def __main__():
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
         if event == sg.WIN_CLOSED or event == 'EXIT':
             sys.exit()
-        if sc.errorHandlingArray(userInput.lower()) in exitError:
+        if userInput.lower() in exitWords:
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: It was really nice talking to you!", end='')
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
             print("Calm Bot: It was really nice talking to you!")
