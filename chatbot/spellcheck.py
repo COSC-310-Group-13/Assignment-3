@@ -12,17 +12,17 @@ class SpellCheck():
 
 
         if " " in array[0]:
-            x = []
-            z=[]
+            curr = []
+            newArray =[]
             for i in range(0,len(array)):
-                x = nltk.word_tokenize(array[i])
+                curr = nltk.word_tokenize(array[i])
                 y=""
-                for w in x:
+                for w in curr:
                     y = y +(self.ps.stem(w)) + " "
-                z.append(y)
-            return z
+                newArray.append(y)
+            return newArray
         else:
-            z = []
+            newArray = []
             for w in array:
-                z.append(self.ps.stem(w))
-            return z
+                newArray.append(self.ps.stem(w))
+            return newArray
