@@ -21,8 +21,11 @@ class SpellCheck():
                     y = y +(self.ps.stem(w)) + " "       #concatenates the words in curr after they have been stemmed
                 newArray.append(y)                       #newArray contains all the sentences after they have been stemmed
             return newArray
-        else:                             #for arrays with just words
+        elif isinstance(array,list):                       #for arrays with just words
             newArray = []
             for w in array:
                 newArray.append(self.ps.stem(w))
+            return newArray
+        else:
+            newArray = self.ps.stem(array)
             return newArray

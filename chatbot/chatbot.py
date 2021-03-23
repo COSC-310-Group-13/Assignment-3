@@ -8,15 +8,11 @@ import random
 import string
 import nltk
 from chatbot.spellcheck import SpellCheck
+from chatbot.pos import POS
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 nltk.download('punkt', quiet = True)  #this package is required to tokenize sentences
-import nltk.text
-import nltk.corpus
-import sys
-import io
-nltk.download('averaged_perceptron_tagger')
-nltk.download('brown')
+
 
 
 #This the class of the chatbot which reads quotes from a file and places them into
@@ -32,6 +28,8 @@ class ChatBot():
     out = nltk.text.ContextIndex([word.lower( ) for word in nltk.corpus.brown.words( )])
 
     sc = SpellCheck()
+
+    ps = POS()
 
     CV = CountVectorizer()
     quotes = [] #lines taken from file will be placed in quotes and used to talk to user
@@ -49,30 +47,6 @@ class ChatBot():
         self.quotes = nltk.sent_tokenize(text)
 
 
-
-
-
-    def outputExtra(self,sentence):
-
-        array = nltk.word_tokenize(sentence) #converts sentence to array
-
-        newResponse = " "
-
-        x = [" "]
-
-        for i in range(0,len(array)):
-            if len(self.out.similar_words(array[i])) != 0:
-                x[i] = self.out.similar_words(array[i])
-                newResponse = newResponse + x[i][random.choice(range(0,len(x[i])))] + " "
-
-
-        return newResponse
-
-
-
-
-
-
     def helloMessage(self, userInput):
         userInput = userInput.lower() #make everything lowercase so bot can doesn't deal with cases
 
@@ -82,10 +56,10 @@ class ChatBot():
         userHellos = ['hello', "what's up", 'hey', 'hi', 'hello', 'howdy', 'sup', 'hey there']
 
 
-        userError = self.sc.errorHandlingArray(userHellos)
+        helloError = self.sc.errorHandlingArray(userHellos)
 
         for word in userInput.split():
-            if (word in userHellos) or (word in userError) :
+            if ((self.sc.errorHandlingArray(word)) in helloError) :         #correcting for possible errors in the end of the response
                 return random.choice(botHellos)
 
         #The sortIndexList function turns the similarityScoresList from the botResponse function
@@ -111,7 +85,8 @@ class ChatBot():
 
     def botResponse(self, userInput):
         userInput = userInput.lower()   #convert text to lowercase
-        self.quotes.append(userInput) #add users' input to end of quotes list
+        errorResponse = self.sc.errorHandlingArray(userInput)
+        self.quotes.append(errorResponse) #add users' input to end of quotes list
         errorArray = self.sc.errorHandlingArray(self.quotes) #error array contains the same content as quotes, but corrects for errors
 
         response = ''      #initialize the bots response
@@ -122,14 +97,14 @@ class ChatBot():
         indexOfQuote = indexOfQuote[1:]     #remove the first element as it is the index of the users' input
 
         if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there quotes similar to users' input it outputs most similar quote
-            self.quotes.remove(userInput)                       #otherwise, it outputs that it does not understand users' input
+            self.quotes.remove(errorResponse)                       #otherwise, it outputs that it does not understand users' input
             return response + self.quotes[indexOfQuote[0]]
         elif similarityScoresList[indexOfQuote[0]] == 0.00:
 
-            self.quotes.remove(userInput)
+            self.quotes.remove(errorResponse)
 
             for i in range(0,10):
-                z = self.outputExtra(userInput)
+                z = self.ps.outputExtra(userInput)      #this loop keeps iterating until a match is found, random sentences are generated each time using POS
                 self.quotes.append(z)
                 errorArray = self.sc.errorHandlingArray(self.quotes) #error array contains the same content as quotes, but corrects for errors
                 response = ''      #initialize the bots response
