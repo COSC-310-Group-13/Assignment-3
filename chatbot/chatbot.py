@@ -10,8 +10,11 @@ import nltk
 from chatbot.spellcheck import SpellCheck
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from nltk.stem import PorterStemmer
 nltk.download('punkt', quiet = True)  #this package is required to tokenize sentences
+import sys
+import io
+nltk.download('averaged_perceptron_tagger')
+nltk.download('brown')
 
 
 #This the class of the chatbot which reads quotes from a file and places them into
@@ -28,7 +31,7 @@ class ChatBot():
 
     CV = CountVectorizer()
     quotes = [] #lines taken from file will be placed in quotes and used to talk to user
-    ps = PorterStemmer()
+
 
     def __init__(self):
         print("Calm Bot: Hello, my name is Calm Bot and I'm here to help you!") #initialize the bot
@@ -40,6 +43,33 @@ class ChatBot():
         text = file.read()
         file.close()
         self.quotes = nltk.sent_tokenize(text)
+
+
+    def outputExtra(self,sentence):
+
+        text = nltk.Text(word.lower() for word in nltk.corpus.brown.words())
+
+        array = nltk.word_tokenize(sentence)
+
+        output = []
+
+        old_stdout = sys.stdout
+
+        newResponse = ""
+
+        new_stdout = io.StringIO()
+
+
+        for i in range(0,len(array)):
+            sys.stdout = new_stdout
+            text.similar(array[i])
+            output = new_stdout.getvalue()
+            x = nltk.word_tokenize(output)
+            newResponse = newResponse + x[random.choice(range(0,len(x)))] + " "
+
+
+        sys.stdout = old_stdout
+        return newResponse
 
 
     def helloMessage(self, userInput):
@@ -88,7 +118,24 @@ class ChatBot():
         if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there quotes similar to users' input it outputs most similar quote
             self.quotes.remove(userInput)                       #otherwise, it outputs that it does not understand users' input
             return response + self.quotes[indexOfQuote[0]]
-        else:
+        elif similarityScoresList[indexOfQuote[0]] == 0.00:
+
+            self.quotes.remove(userInput)
+
+            for i in range(0,10):
+                z = self.outputExtra(userInput)
+                self.quotes.append(z)
+                errorArray = self.sc.errorHandlingArray(self.quotes) #error array contains the same content as quotes, but corrects for errors
+                response = ''      #initialize the bots response
+                countArray = self.CV.fit_transform(errorArray)             ##these two lines form the similarity scores between
+                similarityScores = cosine_similarity(countArray[-1], countArray)    ##each quote and the users input to output the most similar one
+                similarityScoresList = similarityScores.flatten()   #similarityScores is not a 1 dimensional array, so we flatten it
+                indexOfQuote = self.sortIndexList(similarityScoresList)  #this gives us the indices of the most similar to least similar quotes
+                indexOfQuote = indexOfQuote[1:]
+                if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there quotes similar to users' input it outputs most similar quote
+                    self.quotes.remove(z)                       #otherwise, it outputs that it does not understand users' input
+                    return response + self.quotes[indexOfQuote[0]]
+                self.quotes.remove(z)
             self.quotes.remove(userInput)
             reasonableResponse = ["I'm sorry, I didn't quite understand what you just typed.","Sorry I'm not capable talking about that right now.",
                                   "Your choice of discussion is out of my range.", "I didn't get that could you try again?",
