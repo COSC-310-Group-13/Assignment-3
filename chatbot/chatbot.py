@@ -84,7 +84,9 @@ class ChatBot():
 
         userError = self.sc.errorHandlingArray(userHellos)
 
+
         for word in userInput.split():
+            word = self.sc.errorHandlingArray(word)
             if (word in userHellos) or (word in userError) :
                 return random.choice(botHellos)
 
