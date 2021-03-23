@@ -11,6 +11,8 @@ from chatbot.spellcheck import SpellCheck
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 nltk.download('punkt', quiet = True)  #this package is required to tokenize sentences
+import nltk.text
+import nltk.corpus
 import sys
 import io
 nltk.download('averaged_perceptron_tagger')
@@ -26,6 +28,8 @@ nltk.download('brown')
 
 
 class ChatBot():
+
+    out = nltk.text.ContextIndex([word.lower( ) for word in nltk.corpus.brown.words( )])
 
     sc = SpellCheck()
 
@@ -45,31 +49,28 @@ class ChatBot():
         self.quotes = nltk.sent_tokenize(text)
 
 
+
+
+
     def outputExtra(self,sentence):
 
-        text = nltk.Text(word.lower() for word in nltk.corpus.brown.words())
+        array = nltk.word_tokenize(sentence) #converts sentence to array
 
-        array = nltk.word_tokenize(sentence)
+        newResponse = " "
 
-        output = []
-
-        old_stdout = sys.stdout
-
-        newResponse = ""
-
-        new_stdout = io.StringIO()
-
+        x = [" "]
 
         for i in range(0,len(array)):
-            sys.stdout = new_stdout
-            text.similar(array[i])
-            output = new_stdout.getvalue()
-            x = nltk.word_tokenize(output)
-            newResponse = newResponse + x[random.choice(range(0,len(x)))] + " "
+            if len(self.out.similar_words(array[i])) != 0:
+                x[i] = self.out.similar_words(array[i])
+                newResponse = newResponse + x[i][random.choice(range(0,len(x[i])))] + " "
 
 
-        sys.stdout = old_stdout
         return newResponse
+
+
+
+
 
 
     def helloMessage(self, userInput):
@@ -102,6 +103,11 @@ class ChatBot():
                     retList[i] = retList[j]
                     retList[j] = temp
         return retList
+
+
+
+
+
 
     def botResponse(self, userInput):
         userInput = userInput.lower()   #convert text to lowercase
@@ -136,7 +142,7 @@ class ChatBot():
                     self.quotes.remove(z)                       #otherwise, it outputs that it does not understand users' input
                     return response + self.quotes[indexOfQuote[0]]
                 self.quotes.remove(z)
-            self.quotes.remove(userInput)
+
             reasonableResponse = ["I'm sorry, I didn't quite understand what you just typed.","Sorry I'm not capable talking about that right now.",
                                   "Your choice of discussion is out of my range.", "I didn't get that could you try again?",
                                   "Unfortunealy I don't recognize what your trying to tell me."]
