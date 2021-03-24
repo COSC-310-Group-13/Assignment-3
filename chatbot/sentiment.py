@@ -12,10 +12,6 @@ from nltk.tokenize import word_tokenize
 from nltk import classify, NaiveBayesClassifier
 import re, string, random
 
-#this variable is made global because it contains the trained model
-#which is used by the classify method throughout the bot
-global classifier
-
 #this method removes stop words and other irrelevant clutter from user input
 #in order to determine its sentiment
 def remove_noise(tweet_tokens, stop_words = ()):
@@ -90,9 +86,15 @@ def modelTrainer():
     test_data = dataset[7000:]
     #this variable holds the trained model which we can use on user's input
     classifier = NaiveBayesClassifier.train(train_data)
+    return classifier
+
+#this variable is made global because it contains the trained model
+#which is used by the classify method throughout the bot
+classifier = modelTrainer()
 
 #this method uses the trained model to classify if the user's input is positive or negative
 def classify(userInput):
     custom_tokens = remove_noise(word_tokenize(userInput))
     classification = classifier.classify(dict([token, True] for token in custom_tokens))
+    print(classification)
     return classification

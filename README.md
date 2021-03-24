@@ -1,8 +1,6 @@
 # Assignment 3 - An Interactive Conversational Agent
 
 This Project was developed by Sebi Unipan, Chinmay Gopal, Iwan Levin, Amritpal Aujla and Ali Ibrahim.
-
-
 ## Description
 
 This Project aims to impersonate a psychiatrist in the form of an online chat-bot. More specifically, this online chat-bot needs to be able to offer real world advice and be able to hold a conversation with a real person. Our Chat-bot specializes in helping Univesity students with mental health issues such as depression, loneliness and stress.
@@ -25,6 +23,13 @@ Open up command prompt and type the following:
 
 `pip install nltk`  
 
-`pip install -U scikit-learn`  
+`pip install -U scikit-learn` 
+
+You should then open up a Python interactive console (IDLE) and download all nltk packages by:
+
+`import nltk`
+`nltk.download()`
+
+A GUI should pop up, select 'all | All packages' and press download, afterwards close the GUI.
 
 Afterwards, you may run the Main.py file and the bot should work accordingly.

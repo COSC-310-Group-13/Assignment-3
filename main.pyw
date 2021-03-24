@@ -1,16 +1,8 @@
-from chatbot import sentiment
 from chatbot.chatbot import ChatBot
 from chatbot.spellcheck import SpellCheck
 import PySimpleGUI as sg
 import sys
 import subprocess
-# Define the window's contents
-
-
-layout = [[sg.Text('Your Input')],
-          [sg.InputText(key='i', size=(40, 2))],
-          [sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
-          [sg.Button('SEND'), sg.Button('EXIT')]]
 
 # Create the window
 window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
@@ -30,15 +22,14 @@ layout = [[sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
 
 
 def __main__():
-    sentiment.modelTrainer() # Train the model for classifications
-    
+
     # Create the window
     window = sg.Window('Calm Bot', layout, default_element_size=(50, 3),finalize=True)
-    
     cb = ChatBot() 
     sc = SpellCheck()
     window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: Hello, my name is Calm Bot and I'm here to help you!")
-    cb.extractQuotes('quotes.txt') #we establish the quotes in the object
+    cb.extractQuotes('posQuotes.txt') #we establish the posQuotes in the object
+    cb.extractQuotes('negQuotes.txt') #we establish the negQuotes in the object
     exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common salutations
 
     exitError = sc.errorHandlingArray(exitWords) # correcting for errors
