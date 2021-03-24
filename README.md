@@ -32,15 +32,15 @@ Afterwards, you may run the Main.py file and the bot should work accordingly.
 New features:
 
 POS tagging: Using nltk's POS tagging based on stanford's toolkit, this feature takes a word and finds similar words based on context and grammar.
-Some words just aren't avaliable in the prewritten text for the chatbot's replies. This feature allows for words that aren't in the replies but are close enough to some aspect that the chatbot can reply to, so the chatbot assumes the user was talking about the new converted word and replies accordingly.
+Some words just aren't available in the prewritten text for the chatbot's replies. This feature allows for words that aren't in the replies but are close enough to some aspect that the chatbot can reply to, so the chatbot assumes the user was talking about the new converted word and replies accordingly.
 
 Example:
 You: crazy
 Calm Bot: Solution: if you are feeling sad, do something that makes you happy.
 
-The word "crazy" is not avalaible in our text file, but since it is close to the words sad and mad, the bot had a response for these similar words and was able to answer.
+The word "crazy" is not available in our text file, but since it is close to the words sad and mad, the bot had a response for these similar words and was able to answer.
 
-Spell check: Using PorterStemmer, simple spelling mistakes such as typing "anxieti" instead of "anxiety" can be corrected by removing suffixes from both the response and the reply when checking for similarities. This way a large number of spelling mistakes that involve the end of the word being mispelt or gramatically incorrect can be caught and replied to properly.
+Spell check: Using PorterStemmer, simple spelling mistakes such as typing "anxieti" instead of "anxiety" can be corrected by removing suffixes from both the response and the reply when checking for similarities. This way a large number of spelling mistakes that involve the end of the word being mispelt or grammatically incorrect can be caught and replied to properly.
 
 Example:
 You: depressioning
