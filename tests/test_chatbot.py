@@ -6,7 +6,7 @@ import random
 @pytest.fixture
 def chatbot():
     chatbot = cb()
-    chatbot.extractQuotes('quotes.txt')
+    chatbot.extractQuotes('posQuotes.txt')
     return chatbot
     
 @pytest.fixture
