@@ -32,7 +32,8 @@ You should then open up a Python interactive console (IDLE) and download all nlt
 
 A GUI should pop up, select 'all | All packages' and press download, afterwards close the GUI.
 
-Afterwards, you may run the Main.py file and the bot should work accordingly.
+Afterwards, you may run the main.pyw file and the bot should work accordingly.
+***NOTE: When running the main.pyw file, a delay of 10-15 seconds is normal to train the model in the sentiment file***
 
 New features:
 
@@ -52,3 +53,14 @@ You: depressioning
 Calm Bot: Depression can sometimes be overwhelming, just know that you are not alone.
 
 It recognized the depressioning is the same as depression and responded correctly.
+
+Sentiment: Using the sentiment analysis tutorial for Python from https://do.co/3tPTa2w I analysed the quotes we had
+from A2 and categorized them using the sentiment model based on negative or positive sentiments and put them in according 
+text files. After that it was implemented in the ChatBot's botResponse function to classify the sentiment of the user's input
+and based on whether it was positive or negative, it would output the most similar quote to the user's input from the available
+responses.
+
+Example:
+You: i am unhappy
+*internally calm bot recognizes this as a negative sentiment statement*
+Calm Bot: I am here to help you get better.
