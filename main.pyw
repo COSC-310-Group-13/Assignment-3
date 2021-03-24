@@ -4,22 +4,13 @@ import PySimpleGUI as sg
 import sys
 import subprocess
 
-# Create the window
-window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
-
-# Display and interact with the Window using an Event Loop
-
-
 # Finish up by removing from the screen
 # Define the window's contents
 sg.theme('Dark2')
-
 layout = [[sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
           [sg.Text('Your Input')],
           [sg.InputText(key='i', size=(40, 2))],
           [sg.Button('SUBMIT', bind_return_key=True), sg.Button('EXIT')]]
-
-
 
 def __main__():
 
