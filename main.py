@@ -34,7 +34,7 @@ def __main__():
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
         if event == sg.WIN_CLOSED or event == 'EXIT':
             break
-        if userInput.lower() in exitWords:
+        if sc.errorHandlingArray(userInput.lower()) in exitError: #allows for words like "exiting" or "exited" to work, as well as many other cases
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: It was really nice talking to you!", end='')
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
             print("Calm Bot: It was really nice talking to you!")

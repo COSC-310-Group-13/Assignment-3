@@ -8,9 +8,9 @@ import random
 import string
 import nltk
 from chatbot.spellcheck import SpellCheck
+from chatbot.pos import POS
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from nltk.stem import PorterStemmer
 from chatbot import sentiment
 nltk.download('punkt', quiet = True)  #this package is required to tokenize sentences
 
@@ -25,11 +25,13 @@ nltk.download('punkt', quiet = True)  #this package is required to tokenize sent
 
 class ChatBot():
 
+    out = nltk.text.ContextIndex([word.lower( ) for word in nltk.corpus.brown.words( )])
+
     sc = SpellCheck()
     CV = CountVectorizer()
     posQuotes = []
     negQuotes = [] #lines taken from files will be placed in posQuotes and negQuotes to talk to user
-    ps = PorterStemmer()
+    pos = POS()
 
     def __init__(self):
         print("Calm Bot: Hello, my name is Calm Bot and I'm here to help you!") #initialize the bot
@@ -57,10 +59,10 @@ class ChatBot():
         userHellos = ['hello', "what's up", 'hey', 'hi', 'hello', 'howdy', 'sup', 'hey there']
 
 
-        userError = self.sc.errorHandlingArray(userHellos)
+        helloError = self.sc.errorHandlingArray(userHellos)
 
         for word in userInput.split():
-            if (word in userHellos) or (word in userError) :
+            if ((self.sc.errorHandlingArray(word)) in helloError) :         #correcting for possible errors in the end of the response
                 return random.choice(botHellos)
 
         #The sortIndexList function turns the similarityScoresList from the botResponse function
@@ -79,6 +81,7 @@ class ChatBot():
                     retList[j] = temp
         return retList
 
+
     def botResponse(self, userInput):
         userInput = userInput.lower()   #convert text to lowercase
         reasonableResponse = ["I'm sorry, I didn't quite understand what you just typed.","Sorry I'm not capable talking about that right now.",
@@ -86,8 +89,10 @@ class ChatBot():
                                       "Unfortunealy I don't recognize what your trying to tell me."]
         sent = sentiment.classify(userInput)
         if sent == "Positive":
-            self.posQuotes.append(userInput) #add users' input to end of posQuotes list
+            errorResponse = self.sc.errorHandlingArray(userInput)
+            self.posQuotes.append(errorResponse) #add users' input to end of posQuotes list
             errorArray = self.sc.errorHandlingArray(self.posQuotes) #error array contains the same content as posQuotes, but corrects for errors
+
             response = ''      #initialize the bots response
             countArray = self.CV.fit_transform(errorArray)             ##these two lines form the similarity scores between
             similarityScores = cosine_similarity(countArray[-1], countArray)    ##each quote and the users input to output the most similar one
@@ -95,16 +100,33 @@ class ChatBot():
             indexOfQuote = self.sortIndexList(similarityScoresList)  #this gives us the indices of the most similar to least similar quotes
             indexOfQuote = indexOfQuote[1:]     #remove the first element as it is the index of the users' input
 
-            if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there are quotes similar to users' input it outputs most similar quote
-                print(similarityScoresList[indexOfQuote[0]])
-                self.posQuotes.remove(userInput)                       #otherwise, it outputs that it does not understand users' input
+            if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there are posQuotes similar to users' input it outputs most similar quote
+                self.posQuotes.remove(errorResponse)                       #otherwise, it outputs that it does not understand users' input
                 return response + self.posQuotes[indexOfQuote[0]]
-            else:
-                self.posQuotes.remove(userInput)
+            elif similarityScoresList[indexOfQuote[0]] == 0.00:
+
+                self.posQuotes.remove(errorResponse)
+
+                for i in range(0,10):
+                    z = self.pos.outputExtra(userInput)      #this loop keeps iterating until a match is found, random sentences are generated each time using POS
+                    self.posQuotes.append(z)
+                    errorArray = self.sc.errorHandlingArray(self.posQuotes) #error array contains the same content as quotes, but corrects for errors
+                    response = ''      #initialize the bots response
+                    countArray = self.CV.fit_transform(errorArray)             ##these two lines form the similarity scores between
+                    similarityScores = cosine_similarity(countArray[-1], countArray)    ##each quote and the users input to output the most similar one
+                    similarityScoresList = similarityScores.flatten()   #similarityScores is not a 1 dimensional array, so we flatten it
+                    indexOfQuote = self.sortIndexList(similarityScoresList)  #this gives us the indices of the most similar to least similar quotes
+                    indexOfQuote = indexOfQuote[1:]
+                    if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there posQuotes similar to users' input it outputs most similar quote
+                        self.posQuotes.remove(z)                       #otherwise, it outputs that it does not understand users' input
+                        return response + self.posQuotes[indexOfQuote[0]]
+                    self.posQuotes.remove(z)
                 return response + ' ' + random.choice(reasonableResponse)
         else:
-            self.negQuotes.append(userInput) #add users' input to end of negQuotes list
+            errorResponse = self.sc.errorHandlingArray(userInput)
+            self.negQuotes.append(errorResponse) #add users' input to end of negQuotes list
             errorArray = self.sc.errorHandlingArray(self.negQuotes) #error array contains the same content as negQuotes, but corrects for errors
+
             response = ''      #initialize the bots response
             countArray = self.CV.fit_transform(errorArray)             ##these two lines form the similarity scores between
             similarityScores = cosine_similarity(countArray[-1], countArray)    ##each quote and the users input to output the most similar one
@@ -112,11 +134,26 @@ class ChatBot():
             indexOfQuote = self.sortIndexList(similarityScoresList)  #this gives us the indices of the most similar to least similar quotes
             indexOfQuote = indexOfQuote[1:]     #remove the first element as it is the index of the users' input
 
-            if similarityScoresList[indexOfQuote[0]] != 0.00:
-                print(similarityScoresList[indexOfQuote[0]])#if there are quotes similar to users' input it outputs most similar quote
-                self.negQuotes.remove(userInput)                       #otherwise, it outputs that it does not understand users' input
+            if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there negQuotes similar to users' input it outputs most similar quote
+                self.negQuotes.remove(errorResponse)                       #otherwise, it outputs that it does not understand users' input
                 return response + self.negQuotes[indexOfQuote[0]]
-            else:
-                self.negQuotes.remove(userInput)
+            elif similarityScoresList[indexOfQuote[0]] == 0.00:
+
+                self.negQuotes.remove(errorResponse)
+
+                for i in range(0,10):
+                    z = self.pos.outputExtra(userInput)      #this loop keeps iterating until a match is found, random sentences are generated each time using POS
+                    self.negQuotes.append(z)
+                    errorArray = self.sc.errorHandlingArray(self.negQuotes) #error array contains the same content as negQuotes, but corrects for errors
+                    response = ''      #initialize the bots response
+                    countArray = self.CV.fit_transform(errorArray)             ##these two lines form the similarity scores between
+                    similarityScores = cosine_similarity(countArray[-1], countArray)    ##each quote and the users input to output the most similar one
+                    similarityScoresList = similarityScores.flatten()   #similarityScores is not a 1 dimensional array, so we flatten it
+                    indexOfQuote = self.sortIndexList(similarityScoresList)  #this gives us the indices of the most similar to least similar quotes
+                    indexOfQuote = indexOfQuote[1:]
+                    if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there negQuotes similar to users' input it outputs most similar quote
+                        self.uotes.remove(z)                       #otherwise, it outputs that it does not understand users' input
+                        return response + self.negQuotes[indexOfQuote[0]]
+                    self.negQuotes.remove(z)
                 return response + ' ' + random.choice(reasonableResponse)
 
