@@ -25,9 +25,10 @@ nltk.download('punkt', quiet = True)  #this package is required to tokenize sent
 class ChatBot():
 
     sc = SpellCheck()
-
     CV = CountVectorizer()
-    quotes = [] #lines taken from file will be placed in quotes and used to talk to user
+    quotes = []
+    posQuotes = []
+    negQuotes = [] #lines taken from files will be placed in posQuotes and negQuotes to talk to user
     ps = PorterStemmer()
 
     def __init__(self):
