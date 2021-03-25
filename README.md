@@ -42,9 +42,7 @@ POS tagging: Using nltk's POS tagging based on stanford's toolkit, this feature 
 Some words just aren't available in the prewritten text for the chatbot's replies. This feature allows for words that aren't in the replies but are close enough to some aspect that the chatbot can reply to, so the chatbot assumes the user was talking about the new converted word and replies accordingly.
 
 Example:  
-
 You: crazy  
-
 Calm Bot: Solution: if you are feeling sad, do something that makes you happy.
 
 The word "crazy" is not available in our text file, but since it is close to the words sad and mad, the bot had a response for these similar words and was able to answer.
@@ -52,9 +50,7 @@ The word "crazy" is not available in our text file, but since it is close to the
 Spell check: Using PorterStemmer, simple spelling mistakes such as typing "anxieti" instead of "anxiety" can be corrected by removing suffixes from both the response and the reply when checking for similarities. This way a large number of spelling mistakes that involve the end of the word being mispelt or grammatically incorrect can be caught and replied to properly.
 
 Example:  
-
 You: depressioning  
-
 Calm Bot: Depression can sometimes be overwhelming, just know that you are not alone.
 
 It recognized the depressioning is the same as depression and responded correctly.
@@ -66,11 +62,8 @@ and based on whether it was positive or negative, it would output the most simil
 responses.
 
 Example:  
-
 You: i am unhappy  
-
 *internally calm bot recognizes this as a negative sentiment statement*  
-
 Calm Bot: I am here to help you get better.
 
 Synonom Recognition: This was implememtned as the following. I created a list of adjectives that is common when talking to a psychiatrist, then used wordnet to create a 
@@ -79,13 +72,8 @@ if there is a synonom found in the input, whichever potential adjective the syno
 score is increased when being compared to the quotes files.
 
 Example:  
-
 You: im feeling banal  
-
 Calm bot: if you are feeling tired, drink lots of water and have a hearty meal.  
-
 You : im feeling unenergized  
-
 Calm bot: if you are feeling lazy, go workout.  
-
 ***NOTE: the words banal and unenergized are nowhere to be found in quotes files, but the bot recognizes the synonom and shoots a relavent response***
