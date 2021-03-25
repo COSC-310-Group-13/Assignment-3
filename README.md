@@ -27,7 +27,8 @@ Open up command prompt and type the following:
 
 You should then open up a Python interactive console (IDLE) and download all nltk packages by:
 
-`import nltk`
+`import nltk`  
+
 `nltk.download()`
 
 A GUI should pop up, select 'all | All packages' and press download, afterwards close the GUI.
