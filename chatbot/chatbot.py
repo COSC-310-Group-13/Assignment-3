@@ -41,12 +41,12 @@ class ChatBot():
 
     def extractQuotes(self, fileName):
         if fileName[0] == 'p':
-            file = open(fileName, 'r')
+            file = open(fileName, 'r', encoding='utf-8')
             text = file.read()
             file.close()
             self.posQuotes = nltk.sent_tokenize(text) #extract quotes to posQuotes or negQuotes
         elif fileName[0] == 'n':
-            file = open(fileName, 'r')
+            file = open(fileName, 'r', encoding='utf-8')
             text = file.read()
             file.close()
             self.negQuotes = nltk.sent_tokenize(text)
