@@ -9,7 +9,7 @@ sg.theme('Dark2')
 layout = [[sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
           [sg.Text('Your Input')],
           [sg.InputText(key='i', size=(40, 2))],
-          [sg.Button('SUBMIT', bind_return_key=True), sg.Button('EXIT',)]]
+          [sg.Button('SUBMIT', bind_return_key=True), sg.Button('EXIT')]]
 
 def __main__():
 
@@ -56,4 +56,7 @@ def __main__():
         print(e)
         window.close()
         sys.exit()
+    window.close()
+    sys.exit()
+    
 __main__()
