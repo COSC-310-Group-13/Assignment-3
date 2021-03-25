@@ -36,7 +36,7 @@ A GUI should pop up, select 'all | All packages' and press download, afterwards 
 Afterwards, you may run the main.pyw file and the bot should work accordingly.
 ***NOTE: When running the main.pyw file, a delay of 10-15 seconds is normal to train the model in the sentiment file***
 
-New features:
+## New features
 
 POS tagging: Using nltk's POS tagging based on stanford's toolkit, this feature takes a word and finds similar words based on context and grammar.
 Some words just aren't available in the prewritten text for the chatbot's replies. This feature allows for words that aren't in the replies but are close enough to some aspect that the chatbot can reply to, so the chatbot assumes the user was talking about the new converted word and replies accordingly.
