@@ -11,7 +11,7 @@ def test_errorHandlingArray(spellcheck):
     userHellos = ['hello', "what's up", 'hey', 'hi', 'hello', 'howdy', 'sup', 'hey there']
     helloError = spellcheck.errorHandlingArray(userHellos)
 
-    for word in "helwo":
+    for word in "helwo".split():
         if ((spellcheck.errorHandlingArray(word)) in helloError):
             assert True
         else:
