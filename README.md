@@ -64,3 +64,15 @@ Example:
 You: i am unhappy
 *internally calm bot recognizes this as a negative sentiment statement*
 Calm Bot: I am here to help you get better.
+
+Synonom Recognition: This was implememtned as the following. I created a list of adjectives that is common when talking to a psychiatrist, then used wordnet to create a 
+list of synonoms for each potential adjective used. The bot will check the user input to see if it contains any of the potenital adjectives or any of their synonoms. Laslty
+if there is a synonom found in the input, whichever potential adjective the synonom is linked to is added behind the scenes to the user input, so this way its similarity
+score is increased when being compared to the quotes file.
+
+Example: 
+You: im feeling banal
+Calm bot: if you are feeling tired, drink lots of water and have a hearty meal.
+You : im feeling unenergized
+Calm bot: if you are feeling lazy, go workout.
+*note the words banal and unenergized are nowhere to be found in quotes file, but the bot recognizes the synonom and shoots a relavent response*
