@@ -29,26 +29,21 @@ def __main__():
             print("You: "+ values['i'])
             userInput = (values['i'])
             window.FindElement('i').Update('')
-            window['-ML1-' + sg.WRITE_ONLY_KEY].print("You: "+userInput, end='')
-            window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
+            window['-ML1-' + sg.WRITE_ONLY_KEY].print("You: "+userInput, end='\n')
             if event == sg.WIN_CLOSED or event == 'EXIT':
                 break
             if sc.errorHandlingArray(userInput.lower()) in exitError: #allows for words like "exiting" or "exited" to work, as well as many other cases
-                window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: It was really nice talking to you!", end='')
-                window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
+                window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: It was really nice talking to you!", end='\n')
                 print("Calm Bot: It was really nice talking to you!")
                 break
             else:
                 if cb.helloMessage(userInput) != None:  #if hello returns nothing, output a quote
                     out=("Calm Bot: " + cb.helloMessage(userInput))
-                    window['-ML1-' + sg.WRITE_ONLY_KEY].print(out, end='')
-                    window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
+                    window['-ML1-' + sg.WRITE_ONLY_KEY].print(out, end='\n')
                 else:
                     out = ("Calm Bot: " + cb.botResponse(userInput))
                     print(out)
-                    window['-ML1-' + sg.WRITE_ONLY_KEY].print(out, end='')
-                    window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
-                    event, values = window.read()
+                    window['-ML1-' + sg.WRITE_ONLY_KEY].print(out, end='\n')
                     # See if user wants to quit or window was closed
                     if event == sg.WINDOW_CLOSED or event == 'EXIT':
                         break
