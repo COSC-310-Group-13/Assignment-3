@@ -1,43 +1,27 @@
-
-import PySimpleGUI as sg
-
-# Define the window's contents
-sg.theme('GreenTan')
-
-layout = [[sg.Text('Your Input')],
-          [sg.InputText(key='i', size=(40, 2))],
-          [sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
-          [sg.Button('SEND'), sg.Button('EXIT')]]
-
-# Create the window
-window = sg.Window('Very Complex GUI', layout, default_element_size=(50, 3))
-
-# Display and interact with the Window using an Event Loop
-
-
-# Finish up by removing from the screen
 from chatbot.chatbot import ChatBot
 from chatbot.spellcheck import SpellCheck
-import sys
 import PySimpleGUI as sg
+import sys
 import subprocess
+
+# Finish up by removing from the screen
 # Define the window's contents
 sg.theme('Dark2')
-
 layout = [[sg.MLine(key='-ML1-'+sg.WRITE_ONLY_KEY, size=(80,10))],
           [sg.Text('Your Input')],
           [sg.InputText(key='i', size=(40, 2))],
-          [sg.Button('SUBMIT', bind_return_key=True), sg.Button('EXIT')]]
-
-# Create the window
-window = sg.Window('Calm Bot', layout, default_element_size=(50, 3),finalize=True)
+          [sg.Button('SUBMIT', bind_return_key=True), sg.Button('EXIT',)]]
 
 def __main__():
+
+    # Create the window
+    window = sg.Window('Calm Bot', layout, default_element_size=(50, 3),finalize=True)
+    cb = ChatBot() 
     sc = SpellCheck()
-    cb = ChatBot()
     window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: Hello, my name is Calm Bot and I'm here to help you!")
-    cb.extractQuotes('quotes.txt') #we establish the quotes in the object
-    exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common greetings
+    cb.extractQuotes('posQuotes.txt') #we establish the posQuotes in the object
+    cb.extractQuotes('negQuotes.txt') #we establish the negQuotes in the object
+    exitWords = ['bye', 'quit', 'exit', 'see ya', 'good bye'] #Exit the chat bot with common salutations
 
     exitError = sc.errorHandlingArray(exitWords) # correcting for errors
 
@@ -49,12 +33,12 @@ def __main__():
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("You: "+userInput, end='')
         window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
         if event == sg.WIN_CLOSED or event == 'EXIT':
-            sys.exit()
-        if userInput.lower() in exitWords:
+            break
+        if sc.errorHandlingArray(userInput.lower()) in exitError: #allows for words like "exiting" or "exited" to work, as well as many other cases
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("Calm Bot: It was really nice talking to you!", end='')
             window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
             print("Calm Bot: It was really nice talking to you!")
-            sys.exit()
+            break
         else:
             if cb.helloMessage(userInput) != None:  #if hello returns nothing, output a quote
                 out=("Calm Bot: " + cb.helloMessage(userInput))
@@ -67,7 +51,8 @@ def __main__():
                 window['-ML1-' + sg.WRITE_ONLY_KEY].print("\n", end='')
                 event, values = window.read()
                 # See if user wants to quit or window was closed
-                if event == sg.WINDOW_CLOSED or event == 'Quit':
-                    sys.exit()
-
+                if event == sg.WINDOW_CLOSED or event == 'EXIT':
+                    break
+    window.close()
+    sys.exit()
 __main__()
