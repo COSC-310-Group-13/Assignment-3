@@ -3,6 +3,7 @@ import pytest
 from chatbot.chatbot import ChatBot as cb
 import random
 
+#Load in reused classes and variables
 @pytest.fixture
 def chatbot():
     chatbot = cb()
@@ -29,6 +30,7 @@ def rnd_ArrayInt():
     
     return rndint
 
+#Tests the helloMessage method by making sure the bot regocnizes all predetermined user greetings
 def test_helloMessage(chatbot, userHellos, botHellos):
     p = False  
     for i in range(0,len(userHellos)-1):
@@ -39,6 +41,7 @@ def test_helloMessage(chatbot, userHellos, botHellos):
 
     assert p
 
+#tests this function by giving it a large array of random floats and checks if it sorts them correctly.
 def test_sortIndexList(chatbot, rnd_ArrayInt):
     sorted_rnd = chatbot.sortIndexList(rnd_ArrayInt)
     for i in range(0,len(sorted_rnd) - 2):
@@ -48,6 +51,8 @@ def test_sortIndexList(chatbot, rnd_ArrayInt):
             P = False
     assert p
 
+#This test ensure that the bot gives a response of any kind when given a user input
+#but doesn't test for the context of the response
 def test_botResponse(chatbot):
         r = chatbot.botResponse("I am stressed")
         if len(r) > 0:
