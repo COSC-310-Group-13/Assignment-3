@@ -3,7 +3,7 @@ from chatbot.sentiment import classify
 
 
 def test_classify():
-    s = classify('I\'m happy')
+    s = classify('I\'m happy for you and your people')
     if s == 'Positive':
         assert True
     else:
