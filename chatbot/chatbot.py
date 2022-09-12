@@ -167,7 +167,7 @@ class ChatBot():
                     indexOfQuote = self.sortIndexList(similarityScoresList)  #this gives us the indices of the most similar to least similar quotes
                     indexOfQuote = indexOfQuote[1:]
                     if similarityScoresList[indexOfQuote[0]] != 0.00:       #if there negQuotes similar to users' input it outputs most similar quote
-                        self.uotes.remove(z)                       #otherwise, it outputs that it does not understand users' input
+                        self.quotes.remove(z)                       #otherwise, it outputs that it does not understand users' input
                         return response + self.negQuotes[indexOfQuote[0]]
                     self.negQuotes.remove(z)
                 return response + ' ' + random.choice(reasonableResponse)
